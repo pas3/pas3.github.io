@@ -453,7 +453,7 @@ let payloadRunning = false;
                 mark("ALREADY-ROOT", "getuid=" + uid0 + " setuid(0)=" + su0);
                 var m = document.getElementById("msgs");
                 if (m) {
-                    window.setStatusMessage("تم تحميل GoldHEN بالفعل ...[بشير للإلكترونيات]  ...", "success");
+                    window.setStatusMessage("تم تحميل GoldHEN بالفعل ...[بشير للصيانة]  ...", "success");
                 }
                 return;
             }
