@@ -53,7 +53,7 @@ async function doJb() {
     }
 
     if (fn.setuid.invoke(0) !== -1) {
-      window.setStatusMessage("تم تحميل GoldHEN بالفعل .... [بشير للإلكترونيات] ...", "success");
+      window.setStatusMessage("تم تحميل GoldHEN بالفعل .... [بشير للصيانة] ...", "success");
       return;
     }
 
@@ -111,7 +111,7 @@ async function doJb() {
       load_bin(bin_u8);
     }
 
-    window.setStatusMessage("تم تحميل GoldHEN بنجاح .... [بشير للإلكترونيات] ...", "success");
+    window.setStatusMessage("تم تحميل GoldHEN بنجاح .... [بشير للصيانة] ...", "success");
     logger.info("===END===");
   } catch (e) {
     window.setStatusMessage("فشل التحميل للأسف! أعد تشغيل جهازك ...", "failure");
