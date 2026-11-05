@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" manifest="900.manifest">
+<head>
+<title>Bashir Electronic</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<script>
+history.replaceState(null,null,'index.html');var histlength=history.length;history.go(-histlength);
+window.setStatusMessage = function (message, status) {
+    var el = document.getElementById("msgs");
+    if (!el) return;
+    el.textContent = message;
+    el.classList.remove("msg-success", "msg-failure", "msg-progress");
+    if (status) el.classList.add("msg-" + status);
+};
+function DLProgress(e) {
+    var percent = e.total ? Math.round(e.loaded / e.total * 100) : 0;
+    window.setStatusMessage("جارٍ تثبيت ذاكرة التخزين المؤقت دون اتصال بالإنترنت: " + percent + "%", "progress");
+}
+function DisplayCacheProgress() {
+    window.setStatusMessage("تم تثبيت ذاكرة التخزين المؤقت بنجاح ✔", "success");
+    setTimeout(function () {
+        window.setStatusMessage("يرجى قطع الاتصال بالشبكة، وإغلاق المتصفح، ثم إعادة تشغيله ...", "progress");
+    }, 1500);
+}
+window.applicationCache.addEventListener("progress",DLProgress,false);
+window.applicationCache.oncached=function(e){DisplayCacheProgress();};
+window.applicationCache.onupdateready=function(e){DisplayCacheProgress();};
+window.applicationCache.onerror=function(e){window.setStatusMessage("خطأ أثناء تثبيت ذاكرة التخزين المؤقت! - امسح ذاكرة التخزين المؤقت للمتصفح وأعد فتحه ...", "failure");};
+</script>
+<h1>تثبيت التخزين المؤقت</h1>
+<hr>
+<br>
+<h1 id="msgs" class="msg-progress" aria-live="polite">بدء تثبيت ذاكرة التخزين المؤقت...</h1>
+
+</body>
+</html>
