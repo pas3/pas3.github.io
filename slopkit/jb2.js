@@ -36,7 +36,7 @@ const params = new URLSearchParams(location.search);
 function hostOk() {
   var m = document.getElementById("msgs");
   if (m) {
-    window.setStatusMessage("تم تحميل GoldHEN بنجاح .... [بشير للإلكترونيات] ...", "success");
+    window.setStatusMessage("تم تحميل GoldHEN بنجاح .... [بشير للصيانة] ...", "success");
   }
 }
 
@@ -50,7 +50,7 @@ function hostFail() {
 function hostAlready() {
   var m = document.getElementById("msgs");
   if (m) {
-    window.setStatusMessage("تم تحميل GoldHEN بالفعل .... [بشير للإلكترونيات] ...", "success");
+    window.setStatusMessage("تم تحميل GoldHEN بالفعل .... [بشير للصيانة] ...", "success");
   }
 }
 
