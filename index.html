@@ -12,7 +12,7 @@ var isPS4 = match !== null;
 var fwVersion = isPS4 ? match[1] : "Unknown";
 var fwNum = isPS4 ? parseFloat(fwVersion) : NaN;
 
-/* أداة موحدة لتلوين رسائل الحالة دون تغيير وظائف ملفات الاستغلال. */
+
 window.setStatusMessage = function (message, status) {
     var el = document.getElementById("msgs");
     if (!el) return;
@@ -102,7 +102,7 @@ if (!isPS4) {
 }
 </script>
 <div id="fwBadge" class="fw-badge" aria-live="polite">إصدار النظام المكتشف: <bdi id="fwVersion" dir="ltr">---</bdi></div>
-<h1>Gamer Hack  بالعربية   </h1>
+
 <hr>
 <br>
 <h1 id="msgs" class="msg-progress" aria-live="polite">جارٍ تحميل GoldHEN... يُرجى الانتظار</h1>
