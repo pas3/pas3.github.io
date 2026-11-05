@@ -1696,7 +1696,7 @@ export async function kexploit() {
     }
     
     if (localStorage.ExploitLoaded === "yes" && sessionStorage.ExploitLoaded != "yes") {
-        window.setStatusMessage("تم تحميل GoldHEN بالفعل .... [بشير للإلكترونيات] ...", "success");
+        window.setStatusMessage("تم تحميل GoldHEN بالفعل .... [بشير للصيانة] ...", "success");
         return new Promise(() => {});
     }
  
@@ -1837,7 +1837,7 @@ kexploit().then(() => {
     setTimeout(() => {
         try {
             runPayload("./goldhen_2.4b18.13.bin");
-            window.setStatusMessage("تم تحميل GoldHEN بنجاح .... [بشير للإلكترونيات] ...", "success");
+            window.setStatusMessage("تم تحميل GoldHEN بنجاح .... [بشير للصيانة] ...", "success");
         } catch (e) {
             hostFail();
         }
