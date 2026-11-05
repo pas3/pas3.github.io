@@ -36,7 +36,7 @@ const lines = [];
 function hostOk() {
     var m = document.getElementById("msgs");
     if (m) {
-        window.setStatusMessage("تم تحميل GoldHEN بنجاح .... [بشير للإلكترونيات] ...", "success");
+        window.setStatusMessage("تم تحميل GoldHEN بنجاح .... [بشير للصيانة] ...", "success");
     }
 }
 
@@ -674,7 +674,7 @@ function makeRpc(worker) {
                 mark("ALREADY-ROOT", "getuid=" + uid0 + " setuid(0)=" + su0);
                 var m = document.getElementById("msgs");
                 if (m) {
-                    window.setStatusMessage("تم تحميل GoldHEN بالفعل ...[بشير للإلكترونيات] ...", "success");
+                    window.setStatusMessage("تم تحميل GoldHEN بالفعل ...[بشير للصيانة] ...", "success");
                 }
                 return;
             }
