@@ -41,7 +41,7 @@ const STOP_BEFORE_DOUBLE = params.get("stop") === "beforedouble";
 function hostOk() {
     var m = document.getElementById("msgs");
     if (m) {
-        window.setStatusMessage("تم تحميل GoldHEN بنجاح .... [بشير للإلكترونيات] ...", "success");
+        window.setStatusMessage("تم تحميل GoldHEN بنجاح .... [بشير للصيانة] ...", "success");
     }
 }
 
