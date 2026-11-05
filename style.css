@@ -1,4 +1,4 @@
-/* Bashir7 - واجهة عربية بخلفية موحّدة */
+/* تعريب وتطوير: بشير لصيانة الأجهزة الإلكترونية */
 :root {
   color-scheme: dark;
   --accent: #35eaff;
@@ -16,7 +16,7 @@ body {
   color: var(--text);
   font-family: Tahoma, Arial, sans-serif;
   background-color: #03111d;
-  /* تم إزالة التعتيم هنا لعرض الصورة "img.jpg" بكامل إضاءتها الأصلية */
+ 
   background-image: url("img.jpg");
   background-position: center center;
   background-size: cover;
