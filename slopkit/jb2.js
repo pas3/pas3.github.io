@@ -58,7 +58,9 @@ function hostAlready() {
 function hostRetry() {
   var m = document.getElementById("msgs");
   if (m) {
-    m.innerHTML = "فشل التحميل! أعد فتح المتصفح ...";
+    m.classList.remove("msg-success", "msg-progress");
+    m.classList.add("msg-failure");
+    m.textContent = "فشل التحميل! أعد فتح المتصفح ...";
   }
 }
 
