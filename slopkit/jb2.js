@@ -57,7 +57,7 @@ function hostAlready() {
 function hostRetry() {
   var m = document.getElementById("msgs");
   if (m) {
-    window.setStatusMessage("إعادة المحاولة  ...", "progress");
+    window.setStatusMessage("فشل التحميل! أعد فتح المتصفح ...", "progress");
   }
 }
 
