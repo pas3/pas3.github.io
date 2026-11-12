@@ -1160,7 +1160,8 @@ let allDone = false,
       if (agOk) {
         try {
           sessionStorage.setItem(SESSION_DONE_KEY, "1");
-      } catch (e) {}
+        } catch (e) {}
+      }
       /* Only rewrite the URL bar — do NOT navigate/reload (would OOM). */
       try {
         history.replaceState(null, "", "index.html");
