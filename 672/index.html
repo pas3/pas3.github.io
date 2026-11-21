@@ -58,10 +58,9 @@ window.setStatusMessage = function(message, status) {
         }
     };
     appCache.onerror = function() {
-        // لا تمسح علامة الكاش إذا كان قد اكتمل تثبيته سابقاً.
-        // قد يفشل التحقق من وجود تحديث جديد عند فتح الصفحة دون اتصال.
+
         if (localStorage.cached672 === 'yes') {
-            // الكاش محفوظ؛ لا تعرض رسالة الكاش فوق حالة تحميل GoldHEN.
+ 
             return;
         }
         window.setStatusMessage('تعذر تثبيت الكاش لأول مرة. اتصل بالإنترنت وتأكد من وجود مساحة خالية كافية، ثم أعد فتح الصفحة.', 'failure');
