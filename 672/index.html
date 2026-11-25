@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" manifest="cache.manifest">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="dark">
+<title>Bashir Electronic</title>
+<link rel="stylesheet" href="../style.css">
+<script src="jb.js"></script>
+</head>
+<body onload="handle672PageLoad();">
+<div id="fwBadge" class="fw-badge show" aria-live="polite">إصدار النظام المكتشف: <bdi id="fwVersion" dir="ltr">6.72</bdi></div>
+<script>
+window.goldhenLoadStarted = false;
+window.goldhenStatusFinal = false;
+window.setStatusMessage = function(message, status) {
+    var el = document.getElementById('msgs');
+    if (!el) return;
+    el.textContent = message;
+    el.classList.remove('msg-success', 'msg-failure', 'msg-progress');
+    if (status === 'success' || status === 'failure' || status === 'progress') {
+        el.classList.add('msg-' + status);
+    }
+};
+// Experimental startup gate: load the unchanged exploit bootstrap only after
+// AppCache has completed its first install, or on later visits to an existing cache.
+window.cacheJustInstalled672 = false;
+window.exploit672Initialized = false;
+window.exploit672InitStarted = false;
+window.goldhenStartAfterInit672 = false;
+window.initialize672Exploit = function(startGoldhen) {
+    if (startGoldhen) window.goldhenStartAfterInit672 = true;
+    if (window.exploit672Initialized) {
+        if (window.goldhenStartAfterInit672 && !window.cacheJustInstalled672 && !window.goldhenLoadStarted) {
+            window.goldhenStartAfterInit672 = false;
+            setTimeout(function() { if (typeof load_goldhen === 'function') load_goldhen(); }, 50);
+        }
+        return;
+    }
+    if (window.exploit672InitStarted) return;
+    window.exploit672InitStarted = true;
+    var script = document.createElement('script');
+    script.async = false;
+    script.src = 'exploit_init.js';
+    script.onload = function() {
+        window.exploit672Initialized = true;
+        window.exploit672InitStarted = false;
+        if (window.goldhenStartAfterInit672 && !window.cacheJustInstalled672 && !window.goldhenLoadStarted) {
+            window.goldhenStartAfterInit672 = false;
+            setTimeout(function() { if (typeof load_goldhen === 'function') load_goldhen(); }, 50);
+        }
+    };
+    script.onerror = function() {
+        window.exploit672InitStarted = false;
+        window.setStatusMessage('تعذر تحميل ملف تهيئة الاستغلال المحلي. تحقق من تثبيت الكاش.', 'failure');
+    };
+    document.getElementsByTagName('head')[0].appendChild(script);
+};
+window.handle672PageLoad = function() {
+    if (localStorage.cached672 === 'yes' && !window.cacheJustInstalled672) {
+        window.initialize672Exploit(true);
+    }
+};
+(function attach672CacheEvents() {
+    var appCache = window.applicationCache;
+    if (!appCache) {
+        window.setStatusMessage('متصفح الجهاز لا يتيح التخزين المؤقت المطلوب لإصدار 6.72.', 'failure');
+        return;
+    }
+    appCache.onprogress = function(e) {
+        if (window.goldhenLoadStarted) return;
+        var percent = e && e.total ? Math.round((e.loaded / e.total) * 100) : 0;
+        var el = document.getElementById('msgs');
+        if (!el) return;
+        el.textContent = 'جارٍ تثبيت ذاكرة التخزين المؤقت دون اتصال بالإنترنت: ';
+        var percentNode = document.createElement('bdi');
+        percentNode.setAttribute('dir', 'ltr');
+        percentNode.textContent = String(percent) + '%';
+        el.appendChild(percentNode);
+        el.classList.remove('msg-success', 'msg-failure', 'msg-progress');
+        el.classList.add('msg-progress');
+    };
+    appCache.oncached = function() {
+        var wasCached = localStorage.cached672 === 'yes';
+        localStorage.cached672 = 'yes';
+        if (!wasCached) window.cacheJustInstalled672 = true;
+        window.initialize672Exploit(false);
+        if (window.goldhenLoadStarted) return;
+        window.setStatusMessage('تم تثبيت ذاكرة التخزين المؤقت بنجاح ✔', 'success');
+        setTimeout(function() {
+            if (!window.goldhenLoadStarted) {
+                window.setStatusMessage('يرجى قطع الاتصال بالشبكة، وإغلاق المتصفح، ثم إعادة تشغيله ...', 'progress');
+            }
+        }, 2000);
+    };
+    appCache.onnoupdate = function() {
+        localStorage.cached672 = 'yes';
+        window.initialize672Exploit(false);
+        if (!window.goldhenLoadStarted) {
+            window.setStatusMessage('ذاكرة التخزين المؤقت مثبتة ومحدثة مسبقاً.', 'success');
+        }
+    };
+    appCache.onerror = function() {
+        // لا تمسح علامة الكاش إذا كان قد اكتمل تثبيته سابقاً.
+        // قد يفشل التحقق من وجود تحديث جديد عند فتح الصفحة دون اتصال.
+        if (localStorage.cached672 === 'yes') {
+            // الكاش محفوظ؛ لا تعرض رسالة الكاش فوق حالة تحميل GoldHEN.
+            return;
+        }
+        window.setStatusMessage('تعذر تثبيت الكاش لأول مرة. اتصل بالإنترنت وتأكد من وجود مساحة خالية كافية، ثم أعد فتح الصفحة.', 'failure');
+    };
+})();
+<!-- Experimental: exploit bootstrap is loaded after AppCache readiness. -->
+</script>
+
+<hr>
+<br>
+<h1 id="msgs" class="msg-progress" aria-live="polite">جارٍ تحميل GoldHEN... يُرجى الانتظار</h1>
+<h1 style="margin-top: 43px; font-size: 16px; font-weight: normal; color: #ffffff;">
+  <span style="color: #ffffff;">تعريب وتطوير:</span> <span style="color: #00e1ff;">بشير لصيانة الأجهزة الإلكترونية : أجدابيا  ليبيا - شارع طرابلس الداخلي.</span> - <span style="color: #ffffff;">Special Thanks to:</span>
+  <span style="color: #00e1ff;">Gamer Hack, @_AlAzif, ChendoChap, SiSTR0, Abc</span>
+</div>
+<script>
+if (localStorage.passcount == null) localStorage.passcount = 0;
+var passCounter = document.getElementById('passCounter');
+if (passCounter) passCounter.textContent = localStorage.passcount;
+if (localStorage.failcount == null) localStorage.failcount = 0;
+var failCounter = document.getElementById('failCounter');
+if (failCounter) failCounter.textContent = localStorage.failcount;
+
+function load_goldhen() {
+    window.goldhenLoadStarted = true;
+    window.goldhenStatusFinal = false;
+    window.setStatusMessage('جارٍ تحميل GoldHEN... يُرجى الانتظار', 'progress');
+    LoadedMSG = 'تم تحميل GoldHEN بنجاح  — بشير للصيانة';
+    PLfile = '../goldhen_2.4b18.14.bin';
+    setTimeout(function() {
+        try {
+            jailbreak();
+        } catch (e) {
+            window.goldhenStatusFinal = true;
+            window.setStatusMessage('فشل تحميل ملف GoldHEN! أعد تشغيل الجهاز وحاول مجدداً.', 'failure');
+        }
+    }, 500);
+}
+</script>
+</body>
+</html>

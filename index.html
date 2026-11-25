@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="dark">
+<title>Bashir Electronic</title>
+<link rel="stylesheet" href="style.css">
+<script>
+(function () {
+    "use strict";
+
+    var userAgent = String(navigator.userAgent || "");
+    var match = userAgent.match(/PlayStation\s+4[\/ ](\d{1,2}\.\d{2})\b/i);
+    var fwVersion = match ? match[1] : "غير معروف";
+
+    /* Only versions represented by this project's local files are routed. */
+    var routes = {
+        "9.00":  { cache: "cache900.html",       script: "900/alert.js",             module: true  },
+        "9.03":  { cache: "cache900.html",       script: "900/alert.js",             module: true  },
+        "9.04":  { cache: "cache900.html",       script: "900/alert.js",             module: true  },
+        "9.50":  { cache: "cache900.html",       script: "900/alert.js",             module: true  },
+        "9.51":  { cache: "cache900.html",       script: "900/alert.js",             module: true  },
+        "9.60":  { cache: "cache900.html",       script: "900/alert.js",             module: true  },
+
+        "10.00": { cache: "cachecss.html",       script: "css/main.js",              module: false, startJb: true },
+        "10.50": { cache: "cachecss.html",       script: "css/main.js",              module: false, startJb: true },
+        "11.00": { cache: "cachecss.html",       script: "css/main.js",              module: false, startJb: true },
+        "11.02": { cache: "cachecss.html",       script: "css/main.js",              module: false, startJb: true },
+
+        "11.50": { cache: "cacheslopkit.html",   script: "slopkit/chain_lapse.js",   module: true  },
+        "11.52": { cache: "cacheslopkit.html",   script: "slopkit/chain_lapse.js",   module: true  },
+
+        "12.00": { cache: "cacheslopkit.html",   script: "slopkit/jb.js",            module: true  },
+        "12.02": { cache: "cacheslopkit.html",   script: "slopkit/jb.js",            module: true  },
+        "12.50": { cache: "cacheslopkit.html",   script: "slopkit/jb.js",            module: true  },
+        "12.52": { cache: "cacheslopkit.html",   script: "slopkit/jb.js",            module: true  },
+        "13.00": { cache: "cacheslopkit.html",   script: "slopkit/jb.js",            module: true  },
+        "13.02": { cache: "cacheslopkit.html",   script: "slopkit/jb.js",            module: true  },
+        "13.04": { cache: "cacheslopkit.html",   script: "slopkit/jb.js",            module: true  },
+        "13.50": { cache: "cacheslopkit.html",   script: "slopkit/jb.js",            module: true  },
+        "13.52": { cache: "cacheslopkit.html",   script: "slopkit/jb.js",            module: true  },
+        "14.00": { cache: "cacheslopkit.html",   script: "slopkit/jb.js",            module: true  },
+        "14.02": { cache: "cacheslopkit.html",   script: "slopkit/jb.js",            module: true  }
+    };
+
+    function setMessageClass(element, status) {
+        if (!element) return;
+        element.classList.remove("msg-success", "msg-failure", "msg-progress");
+        element.classList.add("msg-" + status);
+    }
+
+    window.setStatusMessage = function (message, status) {
+        var element = document.getElementById("msgs");
+        if (!element) {
+            window.__pendingBashirStatus = { message: message, status: status || "progress" };
+            return;
+        }
+        element.textContent = String(message == null ? "" : message);
+        setMessageClass(element, status === "success" || status === "failure" ? status : "progress");
+    };
+
+    function classifyMessage() {
+        var element = document.getElementById("msgs");
+        if (!element) return;
+        var message = element.textContent || "";
+        var status = "progress";
+        if (/(فشل|خطأ|تعذر|غير مدعوم|لا يدعم|unsupported|error|failed)/i.test(message)) {
+            status = "failure";
+        } else if (/(نجاح|بنجاح|بالفعل|تم تحميل|تم تثبيت|success|loaded)/i.test(message)) {
+            status = "success";
+        }
+        setMessageClass(element, status);
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+        var badge = document.getElementById("fwBadge");
+        var versionElement = document.getElementById("fwVersion");
+        if (versionElement) versionElement.textContent = fwVersion;
+        if (badge) badge.classList.add("show");
+
+        if (window.__pendingBashirStatus) {
+            var pending = window.__pendingBashirStatus;
+            window.__pendingBashirStatus = null;
+            window.setStatusMessage(pending.message, pending.status);
+        }
+
+        var messageElement = document.getElementById("msgs");
+        if (messageElement && window.MutationObserver) {
+            var observer = new MutationObserver(classifyMessage);
+            observer.observe(messageElement, { childList: true, characterData: true, subtree: true });
+        }
+        classifyMessage();
+    });
+
+    function onScriptError() {
+        window.setStatusMessage("تعذر تحميل ملف التشغيل المحلي. تحقق من تثبيت الكاش ثم أعد فتح المتصفح.", "failure");
+    }
+
+    function loadRoute(route) {
+        var script = document.createElement("script");
+        if (route.module) script.type = "module";
+        script.src = route.script;
+        script.onerror = onScriptError;
+        if (route.startJb) {
+            script.onload = function () {
+                window.setTimeout(function () {
+                    if (typeof doJb === "function") doJb();
+                    else onScriptError();
+                }, 500);
+            };
+        }
+        document.head.appendChild(script);
+    }
+
+    if (!match) {
+        document.addEventListener("DOMContentLoaded", function () {
+            window.setStatusMessage(" هذه الصفحة مخصصة لأجهزة PS4. من 6.72 الى 14.02. ", "failure");
+        });
+        return;
+    }
+
+    /* 6.72 has its own manifest and startup page. */
+    if (fwVersion === "6.72") {
+        window.location.replace("672/index.html");
+        return;
+    }
+
+    var route = routes[fwVersion];
+    if (!route) {
+        document.addEventListener("DOMContentLoaded", function () {
+            window.setStatusMessage("إصدار النظام غير مدعوم في هذه النسخة: " + fwVersion, "failure");
+        });
+        return;
+    }
+
+    var appCache = window.applicationCache;
+    if (!appCache) {
+        document.addEventListener("DOMContentLoaded", function () {
+            window.setStatusMessage("تعذر الوصول إلى نظام التخزين المؤقت في متصفح الجهاز.", "failure");
+        });
+        return;
+    }
+
+    if (appCache.status === 0) {
+        window.location.replace(route.cache);
+    } else {
+        loadRoute(route);
+    }
+})();
+</script>
+</head>
+<body>
+<div id="fwBadge" class="fw-badge" aria-live="polite">إصدار النظام المكتشف: <bdi id="fwVersion" dir="ltr">---</bdi></div>
+<footer id="supportedFirmware" dir="rtl" lang="ar">
+    <span class="fw-title">الإصدارات المدعومة:</span>
+    <span class="fw-list" dir="ltr">
+        14.02 &bull; 14.00 &bull; 13.xx &bull; 12.xx &bull; 11.xx &bull; 9.xx &bull; 6.72
+    </span>
+</footer>
+<hr>
+<br>
+<h1 id="msgs" class="msg-progress" aria-live="polite" style="font-size: 30px;margin-top: 77px;margin-bottom: 455px;">جارٍ تحميل GoldHEN، يُرجى الانتظار</h1>
+<h1 style="margin-top: 43px; font-size: 16px; font-weight: normal; color: #ffffff;">
+  <span style="color: #ffffff;">تعريب وتطوير:</span> <span style="color: #00e1ff;">بشير لصيانة الأجهزة الإلكترونية: أجدابيا - شارع طرابلس الداخلي.</span> - <span style="color: #ffffff;">Special Thanks to:</span>
+  <span style="color: #00e1ff;">Gamer Hack, @_AlAzif, ChendoChap, SiSTR0, Abc</span>
+</h1>
+</body>
+</html>

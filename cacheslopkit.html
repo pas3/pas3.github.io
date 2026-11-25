@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" manifest="slopkit.manifest">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bashir Electronic</title>
+<link rel="stylesheet" href="style.css">
+<script>
+function setCacheMessage(message, status) {
+    var el = document.getElementById("msgs");
+    if (!el) return;
+    el.textContent = message;
+    el.classList.remove("msg-success", "msg-failure", "msg-progress");
+    el.classList.add("msg-" + (status || "progress"));
+}
+function DLProgress(e) {
+    var percent = e && e.total > 0 ? Math.round((e.loaded / e.total) * 100) : 0;
+    var el = document.getElementById("msgs");
+    if (!el) return;
+    setCacheMessage("جارٍ تثبيت ذاكرة التخزين المؤقت دون اتصال بالإنترنت: ", "progress");
+    var number = document.createElement("bdi");
+    number.setAttribute("dir", "ltr");
+    number.textContent = String(percent) + "%";
+    el.appendChild(number);
+}
+function DisplayCacheProgress() {
+    setCacheMessage("تم تثبيت ذاكرة التخزين المؤقت بنجاح ✔", "success");
+    setTimeout(function () {
+        setCacheMessage("يرجى قطع الاتصال بالشبكة، وإغلاق المتصفح، ثم إعادة تشغيله.", "progress");
+    }, 1500);
+}
+(function () {
+    history.replaceState(null, null, "index.html");
+    var histlength = history.length;
+    history.go(-histlength);
+    var appCache = window.applicationCache;
+    if (!appCache) {
+        document.addEventListener("DOMContentLoaded", function () {
+            setCacheMessage("متصفح الجهاز لا يتيح التخزين المؤقت المطلوب.", "failure");
+        });
+        return;
+    }
+    if (appCache.addEventListener) appCache.addEventListener("progress", DLProgress, false);
+    appCache.oncached = function () { DisplayCacheProgress(); };
+    appCache.onupdateready = function () { DisplayCacheProgress(); };
+    appCache.onerror = function () {
+        setCacheMessage("حدث خطأ أثناء تثبيت ذاكرة التخزين المؤقت. امسح كاش المتصفح وأعد المحاولة.", "failure");
+    };
+})();
+</script>
+</head>
+<body>
+<h1>تثبيت التخزين المؤقت</h1>
+<footer id="supportedFirmware" dir="rtl" lang="ar">
+    <span class="fw-title">الإصدارات المدعومة:</span>
+    <span class="fw-list" dir="ltr">
+        14.02 &bull; 14.00 &bull; 13.xx &bull; 12.xx &bull; 11.xx &bull; 9.xx &bull; 6.72
+    </span>
+</footer>
+<hr>
+<br>
+<h1 id="msgs" class="msg-progress" aria-live="polite" style="font-size: 30px;margin-top: 77px;margin-bottom: 455px;">بدء تثبيت ذاكرة التخزين المؤقت</h1>
+<h1 style="margin-top: 43px; font-size: 16px; font-weight: normal; color: #ffffff;">
+  <span style="color: #ffffff;">تعريب وتطوير:</span> <span style="color: #00e1ff;">بشير لصيانة الأجهزة الإلكترونية: أجدابيا - شارع طرابلس الداخلي.</span> - <span style="color: #ffffff;">Special Thanks to:</span>
+  <span style="color: #00e1ff;">Gamer Hack, @_AlAzif, ChendoChap, SiSTR0, Abc</span>
+</h1>
+</body>
+</html>
